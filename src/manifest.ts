@@ -22,10 +22,4 @@ export default defineManifest({
       matches: ['<all_urls>'],
     },
   ],
-  web_accessible_resources: [
-    {
-      resources: ['assets/*'],
-      matches: ['<all_urls>'],
-    },
-  ],
 });
