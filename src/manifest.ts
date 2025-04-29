@@ -3,7 +3,8 @@ import { defineManifest } from '@crxjs/vite-plugin';
 
 import packageData from '../package.json';
 
-const isDev = process.env.NODE_ENV === 'development';
+// const isDev = process.env.NODE_ENV === 'development';
+const isDev = true; // ← force it during local testing
 
 export default defineManifest({
   manifest_version: 3,
@@ -43,8 +44,21 @@ export default defineManifest({
   ],
   web_accessible_resources: [
     {
-      resources: ['icon16.png', 'icon32.png', 'icon48.png', 'icon128.png'],
-      matches: [],
+      resources: [
+        'assets/*.js',
+        'assets/*.css',
+        'assets/*.woff2',
+        'assets/*.ttf',
+        'assets/*.svg',
+        'assets/*.json',
+        'assets/*.ts',
+        'assets/createShadowRoot-*.js', // match the specific error
+        'icon16.png',
+        'icon32.png',
+        'icon48.png',
+        'icon128.png',
+      ],
+      matches: ['<all_urls>'], // ← important!
     },
   ],
 });

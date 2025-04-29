@@ -9,6 +9,8 @@
  * @module index.dev
  */
 
+import './neutralizer';
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 

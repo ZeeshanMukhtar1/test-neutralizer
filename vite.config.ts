@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-param-reassign */
 import { resolve } from 'path';
 import { crx } from '@crxjs/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
@@ -8,19 +6,20 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import manifest from './src/manifest';
 
+// Safe workaround: only applies fix if bundle exists
 const viteManifestHackIssue846: Plugin & {
   renderCrxManifest: (manifest: any, bundle: any) => void;
 } = {
-  // Workaround from https://github.com/crxjs/chrome-extension-tools/issues/846#issuecomment-1861880919.
   name: 'manifestHackIssue846',
   renderCrxManifest(_manifest, bundle) {
-    bundle['manifest.json'] = bundle['.vite/manifest.json'];
-    bundle['manifest.json'].fileName = 'manifest.json';
-    delete bundle['.vite/manifest.json'];
+    if (bundle['.vite/manifest.json']) {
+      bundle['manifest.json'] = bundle['.vite/manifest.json'];
+      bundle['manifest.json'].fileName = 'manifest.json';
+      delete bundle['.vite/manifest.json'];
+    }
   },
 };
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -38,6 +37,15 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
       '@utils': resolve(__dirname, './src/utils'),
       '@assets': resolve(__dirname, './src/assets'),
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        popup: resolve(__dirname, 'src/popup/index.html'),
+        options: resolve(__dirname, 'src/options/index.html'),
+        // content scripts and background worker are injected via manifest, no need here
+      },
     },
   },
 });
