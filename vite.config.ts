@@ -41,11 +41,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      input: {
-        popup: resolve(__dirname, 'src/popup/index.html'),
-        options: resolve(__dirname, 'src/options/index.html'),
-        // content scripts and background worker are injected via manifest, no need here
-      },
+      input: {},
     },
   },
 });
